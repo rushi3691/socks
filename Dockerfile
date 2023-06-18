@@ -4,4 +4,6 @@ RUN apk add --no-cache dante-server
 
 COPY sockd.conf /etc/sockd.conf
 
-CMD sockd -D -f /etc/sockd.conf
+EXPOSE 1080
+
+CMD ["sockd"]

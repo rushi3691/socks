@@ -1,9 +1,11 @@
-FROM alpine:latest
+FROM debian:buster-slim
 
-RUN apk add --no-cache dante-server
+RUN apt-get update && apt-get install -y squid openssl
 
-COPY sockd.conf /etc/sockd.conf
+RUN openssl req -new -newkey rsa:2048 -sha256 -days 365 -nodes -x509 -keyout /etc/squid/squid.key -out /etc/squid/squid.crt -subj "/C=US/ST=CA/L=San Francisco/O=Render/CN=proxy.render.com"
 
-EXPOSE 1080
+COPY squid.conf /etc/squid/squid.conf
 
-CMD ["sockd"]
+EXPOSE 3128
+
+CMD ["squid", "-N"]
